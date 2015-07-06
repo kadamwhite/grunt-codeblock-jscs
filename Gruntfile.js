@@ -17,7 +17,10 @@ module.exports = function( grunt ) {
     pkg: grunt.file.readJSON( 'package.json' ),
 
     // These definitions are used to test the output of the plugin
-    'codeblock-jshint': {
+    'codeblock-jscs': {
+      options: {
+        preset: 'jquery'
+      },
       passing: {
         src: [
           'tests/fixtures/input/passing.md'
@@ -45,12 +48,14 @@ module.exports = function( grunt ) {
           'tests/fixtures/input/failing.md'
         ]
       },
-      'with-jshint-options': {
+      'with-jscs-options': {
         options: {
-          // Custom JSHint configuration
-          jshintOptions: {
-            asi: true,
-            eqnull: true
+          // Custom JSCS configuration
+          jscsOptions: {
+            preset: 'jquery',
+            // Disable some rules
+            validateQuoteMarks: null,
+            requireCamelCaseOrUpperCaseIdentifiers: null
           }
         },
         src: [

@@ -9,14 +9,14 @@ var bluebird = require( 'bluebird' );
 /* global Promise:true */// Suppress warning about redefiniton of `Promise`
 var Promise = bluebird.Promise; // For older versions of node
 
-// The names of the codeblock-jshint task targets specified in the Gruntfile
+// The names of the codeblock-jscs task targets specified in the Gruntfile
 // that we should run and validate against the expected output fixtures
 var subTasks = [
   'filtered',
   'forced',
   'failing',
   'passing',
-  'with-jshint-options'
+  'with-jscs-options'
 ];
 
 // Get the full path of the test directory by using this file as a referent
@@ -79,7 +79,7 @@ function getOutputFilePath( subTask ) {
 function runTaskCommand( subTask ) {
   return new Promise(function( resolve, reject ) {
     var command = cp.spawn( pathToGruntBinary, [
-      'codeblock-jshint:' + subTask
+      'codeblock-jscs:' + subTask
     ]);
 
     var outputSteam = fs.createWriteStream( getOutputFilePath( subTask ) );
@@ -98,7 +98,7 @@ function runTaskCommand( subTask ) {
 // RUN THE TASKS
 // ============================================================================
 
-console.log( 'Running all codeblock-jshint tasks...' );
+console.log( 'Running all codeblock-jscs tasks...' );
 
 var runAllSubtasks = bluebird.all( subTasks.map( runTaskCommand ) );
 
@@ -141,13 +141,13 @@ var checkAllSubtasks = runAllSubtasks.then(function checkAllSubtaskOutput() {
         if ( results.expected === results.actual ) {
           return resolve( subTask );
         }
-        console.error( chalk.red( '\nUnexpected output from task codeblock-jshint:' + subTask ) );
+        console.error( chalk.red( '\nUnexpected output from task codeblock-jscs:' + subTask ) );
         console.error( '\nGot\n' );
         // console.error( chalk.styles.bgBlack.open
         console.error( chalk.italic( results.actual ) );
         console.error( '\nwhen expecting\n' );
         console.error( chalk.italic( results.expected ) );
-        reject( 'codeblock-jshint:' + subTask + ' failed' );
+        reject( 'codeblock-jscs:' + subTask + ' failed' );
       });
     }).catch( handleError );
   }

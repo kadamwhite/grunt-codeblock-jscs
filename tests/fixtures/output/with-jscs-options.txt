@@ -1,0 +1,3 @@
+[4mRunning "codeblock-jscs:with-jscs-options" (codeblock-jscs) task[24m
+
+[32mDone, without errors.[39m

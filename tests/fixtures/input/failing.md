@@ -2,7 +2,9 @@
 
 ```javascript
 // codeblock one: 2 errors
-var message = 'Where did my semicolon go'
+var message = "Wrong type of quote marks";
+
+var wEiRd_CaSe = 'Camel-snakes are dangeroues'
 
 undefinedFunctionIsUndefined();
 ```

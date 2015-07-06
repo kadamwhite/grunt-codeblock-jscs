@@ -1,9 +1,9 @@
 {
-  "name": "grunt-codeblock-jshint",
-  "version": "0.3.0",
+  "name": "grunt-codeblock-jscs",
+  "version": "0.1.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/kadamwhite/grunt-codeblock-jshint.git"
+    "url": "https://github.com/kadamwhite/grunt-codeblock-jscs.git"
   },
   "contributors": [
     {
@@ -14,7 +14,7 @@
     }
   ],
   "license": "MIT",
-  "description": "Run JSHint against code snippets within Markdown slides",
+  "description": "Run JSCS against code snippets within Markdown slides",
   "engines": {
     "node": ">=0.10.0"
   },
@@ -33,7 +33,8 @@
     "grunt": ">=0.4.0"
   },
   "dependencies": {
-    "jshint": "^2.8.0",
+    "jscs": "^1.13.1",
+    "lodash": "^3.10.0",
     "tokenize-markdown": "^0.2.0"
   },
   "devDependencies": {

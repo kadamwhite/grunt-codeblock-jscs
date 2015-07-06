@@ -10,15 +10,15 @@ var Promise = require( 'bluebird' ); // For older versions of node
 var grunt = require( 'grunt' );
 
 /**
- * Return a promise that resolves when the codeblock-jshint event is received
+ * Return a promise that resolves when the codeblock-jscs event is received
  *
  * @param  {Grunt} grunt Grunt
  * @return {Promise}     A promise that will be resolved or rejected based on
- *                       the results of the 'codeblock-jshint' Grunt event
+ *                       the results of the 'codeblock-jscs' Grunt event
  */
 function makeTaskDonePromise( grunt ) {
   return new Promise(function( resolve, reject ) {
-    grunt.event.once( 'codeblock-jshint', function( status, results ) {
+    grunt.event.once( 'codeblock-jscs', function( status, results ) {
       // Ternary returns either resolve or reject, conditionally
       ( status === 'error' ? reject : resolve )({
         // Only "error" results in a rejection:
@@ -30,28 +30,28 @@ function makeTaskDonePromise( grunt ) {
   });
 }
 
-describe( 'codeblock-jshint.js', function() {
+describe( 'codeblock-jscs.js', function() {
   var codeblockJSHint;
 
   beforeEach(function() {
     // Get our task creation method
-    codeblockJSHint = require( '../../tasks/codeblock-jshint' );
+    codeblockJSHint = require( '../../tasks/codeblock-jscs' );
   });
 
-  it( 'registers a codeblock-jshint task', function() {
+  it( 'registers a codeblock-jscs task', function() {
     codeblockJSHint( grunt );
     // Check that task is registered
-    expect( grunt.task.exists( 'codeblock-jshint' ) ).to.be.ok;
+    expect( grunt.task.exists( 'codeblock-jscs' ) ).to.be.ok;
   });
 
-  describe( 'codeblock-jshint task', function() {
+  describe( 'codeblock-jscs task', function() {
     var taskDone;
 
     beforeEach(function() {
       // Start the task queue as empty
       grunt.task.clearQueue();
 
-      // Clear out previously-registered codeblock-jshint task
+      // Clear out previously-registered codeblock-jscs task
       // console.log( require('lodash').keys( grunt.tasks ) );
       // grunt.tasks._tasks.length = 0;
 
@@ -59,7 +59,7 @@ describe( 'codeblock-jshint.js', function() {
       codeblockJSHint( grunt );
 
       // Turn off all previously-registered event listeners
-      grunt.event.removeAllListeners( 'codeblock-jshint' );
+      grunt.event.removeAllListeners( 'codeblock-jscs' );
 
       // taskDone will notify us of when the task completes
       taskDone = makeTaskDonePromise( grunt );
@@ -78,12 +78,12 @@ describe( 'codeblock-jshint.js', function() {
 
     it( 'runs the task with the provided options', function() {
 
-      // Enqueue the 'codeblock-jshint' task
-      grunt.task.run( 'codeblock-jshint' );
+      // Enqueue the 'codeblock-jscs' task
+      grunt.task.run( 'codeblock-jscs' );
 
       // Set task options
       grunt.initConfig({
-        'codeblock-jshint': {
+        'codeblock-jscs': {
           src: [ 'tests/fixtures/input/passing.md' ]
         }
       });
@@ -110,12 +110,12 @@ describe( 'codeblock-jshint.js', function() {
 
     it( 'fails when identifying syntax errors in JavaScript code blocks', function() {
 
-      // Enqueue the 'codeblock-jshint' task
-      grunt.task.run( 'codeblock-jshint' );
+      // Enqueue the 'codeblock-jscs' task
+      grunt.task.run( 'codeblock-jscs' );
 
       // Set task options
       grunt.initConfig({
-        'codeblock-jshint': {
+        'codeblock-jscs': {
           src: [ 'tests/fixtures/input/failing.md' ]
         }
       });
@@ -127,14 +127,14 @@ describe( 'codeblock-jshint.js', function() {
       return expect( taskDone ).to.be.rejected;
     });
 
-    it( 'can be configured with specific JSHint options', function() {
+    it( 'can be configured with specific jscs options', function() {
 
-      // Enqueue the 'codeblock-jshint' task
-      grunt.task.run( 'codeblock-jshint' );
+      // Enqueue the 'codeblock-jscs' task
+      grunt.task.run( 'codeblock-jscs' );
 
       // Set task options
       grunt.initConfig({
-        'codeblock-jshint': {
+        'codeblock-jscs': {
           options: {
             jshintOptions: {
               // Relaxing options that will make the "failing" fixture actually pass
@@ -149,7 +149,7 @@ describe( 'codeblock-jshint.js', function() {
       // Run the task queue
       grunt.task.start();
 
-      // Verify that, with these JSHint settings, the promise is fulfilled
+      // Verify that, with these jscs settings, the promise is fulfilled
       var completion = taskDone.then(function( result ) {
         expect( result ).to.have.property( 'status' );
         expect( result.status ).to.equal( 'success' );
@@ -168,12 +168,12 @@ describe( 'codeblock-jshint.js', function() {
 
     it( 'passes even if errors are present when --force is specified', function() {
 
-      // Enqueue the 'codeblock-jshint' task
-      grunt.task.run( 'codeblock-jshint' );
+      // Enqueue the 'codeblock-jscs' task
+      grunt.task.run( 'codeblock-jscs' );
 
       // Set task options
       grunt.initConfig({
-        'codeblock-jshint': {
+        'codeblock-jscs': {
           options: {
             force: true
           },
@@ -189,12 +189,12 @@ describe( 'codeblock-jshint.js', function() {
 
     it( 'correctly identifies syntax errors in JavaScript code blocks', function() {
 
-      // Enqueue the 'codeblock-jshint' task
-      grunt.task.run( 'codeblock-jshint' );
+      // Enqueue the 'codeblock-jscs' task
+      grunt.task.run( 'codeblock-jscs' );
 
       // Set task options
       grunt.initConfig({
-        'codeblock-jshint': {
+        'codeblock-jscs': {
           src: [ 'tests/fixtures/input/failing.md' ]
         }
       });

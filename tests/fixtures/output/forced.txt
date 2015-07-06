@@ -1,10 +1,35 @@
-[4mRunning "codeblock-jshint:forced" (codeblock-jshint) task[24m
+[4mRunning "codeblock-jscs:forced" (codeblock-jscs) task[24m
 
-[1m[22m
-      2 |[90mvar message = 'Where did my semicolon go'[39m
-                                                  ^ Missing semicolon.
-      2 |[90mif ( 'we compare with null with not-threequals' == null ) {[39m
-                                                         ^ Use '===' to compare with 'null'.
-
+tests/fixtures/input/failing.md
+    All identifiers must be camelCase or UPPER_CASE [22m
+       2 |var message = "Wrong type of quote marks";
+       3 |
+       4 |var wEiRd_CaSe = 'Camel-snakes are dangeroues'
+  ------------^
+       5 |
+       6 |undefinedFunctionIsUndefined();
+  
+    Invalid quote mark found [22m
+       2 |var message = "Wrong type of quote marks";
+       3 |
+       4 |var wEiRd_CaSe = 'Camel-snakes are dangeroues'
+  -------------------------^
+       5 |
+       6 |undefinedFunctionIsUndefined();
+  
+    Invalid quote mark found [22m
+       1 |// Another codeblock: 1 error
+       2 |if ( 'we compare with null with not-threequals' == null ) {
+  -------------^
+       3 |  console.log( 'this will fail' );
+       4 |}
+  
+    Invalid quote mark found [22m
+       1 |// Another codeblock: 1 error
+       2 |if ( 'we compare with null with not-threequals' == null ) {
+       3 |  console.log( 'this will fail' );
+  -----------------------^
+       4 |}
+  
 
 [32mDone, without errors.[39m
