@@ -9,7 +9,7 @@ module.exports = function( grunt ) {
   // Load tasks.
   require( 'load-grunt-tasks' )( grunt );
 
-  // Load the codeblock-jshint task itself
+  // Load the codeblock-jscs task itself
   grunt.loadTasks( 'tasks' );
 
   grunt.initConfig({
@@ -33,7 +33,7 @@ module.exports = function( grunt ) {
       },
       filtered: {
         options: {
-          // Only run blocks with language "javascript" through jshint (skip "js")
+          // Only run blocks with language "javascript" through jscs (skip "js")
           lang: 'javascript'
         },
         src: [
