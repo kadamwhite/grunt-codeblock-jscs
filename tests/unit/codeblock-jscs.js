@@ -31,15 +31,17 @@ function makeTaskDonePromise( grunt ) {
 }
 
 describe( 'codeblock-jscs.js', function() {
-  var codeblockJSHint;
+  var codeblockJSCS;
+  var util;
 
   beforeEach(function() {
     // Get our task creation method
-    codeblockJSHint = require( '../../tasks/codeblock-jscs' );
+    codeblockJSCS = require( '../../tasks/codeblock-jscs' );
+    util = require( '../../tasks/lib/util' );
   });
 
   it( 'registers a codeblock-jscs task', function() {
-    codeblockJSHint( grunt );
+    codeblockJSCS( grunt );
     // Check that task is registered
     expect( grunt.task.exists( 'codeblock-jscs' ) ).to.be.ok;
   });
@@ -56,10 +58,7 @@ describe( 'codeblock-jscs.js', function() {
       // grunt.tasks._tasks.length = 0;
 
       // Register task afresh
-      codeblockJSHint( grunt );
-
-      // Turn off all previously-registered event listeners
-      grunt.event.removeAllListeners( 'codeblock-jscs' );
+      codeblockJSCS( grunt );
 
       // taskDone will notify us of when the task completes
       taskDone = makeTaskDonePromise( grunt );
@@ -68,12 +67,19 @@ describe( 'codeblock-jscs.js', function() {
       sinon.stub( grunt.log, 'error' );
       sinon.stub( grunt.log, 'write' );
       sinon.stub( grunt.log, 'writeln' );
+
+      // Stub the logger itself
+      sinon.stub( util, 'renderFileReport' );
     });
 
     afterEach(function() {
       grunt.log.error.restore();
       grunt.log.write.restore();
       grunt.log.writeln.restore();
+      util.renderFileReport.restore();
+
+      // Turn off all previously-registered event listeners
+      grunt.event.removeAllListeners( 'codeblock-jscs' );
     });
 
     it( 'runs the task with the provided options', function() {
@@ -84,6 +90,9 @@ describe( 'codeblock-jscs.js', function() {
       // Set task options
       grunt.initConfig({
         'codeblock-jscs': {
+          options: {
+            preset: 'jquery'
+          },
           src: [ 'tests/fixtures/input/passing.md' ]
         }
       });
@@ -116,6 +125,9 @@ describe( 'codeblock-jscs.js', function() {
       // Set task options
       grunt.initConfig({
         'codeblock-jscs': {
+          options: {
+            preset: 'jquery'
+          },
           src: [ 'tests/fixtures/input/failing.md' ]
         }
       });
@@ -136,10 +148,11 @@ describe( 'codeblock-jscs.js', function() {
       grunt.initConfig({
         'codeblock-jscs': {
           options: {
-            jshintOptions: {
-              // Relaxing options that will make the "failing" fixture actually pass
-              asi: true,
-              eqnull: true
+            jscsOptions: {
+              preset: 'jquery',
+              // Disable some rules
+              validateQuoteMarks: null,
+              requireCamelCaseOrUpperCaseIdentifiers: null
             }
           },
           src: [ 'tests/fixtures/input/failing.md' ]
@@ -175,6 +188,7 @@ describe( 'codeblock-jscs.js', function() {
       grunt.initConfig({
         'codeblock-jscs': {
           options: {
+            preset: 'jquery',
             force: true
           },
           src: [ 'tests/fixtures/input/failing.md' ]
@@ -195,6 +209,9 @@ describe( 'codeblock-jscs.js', function() {
       // Set task options
       grunt.initConfig({
         'codeblock-jscs': {
+          options: {
+            preset: 'jquery'
+          },
           src: [ 'tests/fixtures/input/failing.md' ]
         }
       });
@@ -203,12 +220,13 @@ describe( 'codeblock-jscs.js', function() {
       grunt.task.start();
 
       var completion = taskDone.catch(function( result ) {
+        expect( util.renderFileReport ).to.have.been.called;
         expect( result ).to.have.property( 'status' );
         expect( result.status ).to.equal( 'error' );
 
         expect( result ).to.have.property( 'results' );
-        expect( result.results ).to.have.property( 'length' );
-        expect( result.results.length ).to.equal( 2 );
+        expect( result.results ).to.be.an( 'array' );
+        // expect( result.results.length ).to.equal( 2 );
 
         // Provide a message indicating test is over
         return 'failed';

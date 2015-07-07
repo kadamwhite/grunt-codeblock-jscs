@@ -27,7 +27,7 @@
     "publish": "npm test",
     "lint": "grunt lint",
     "pretest": "npm run lint",
-    "test": "mocha tests/unit && npm run validate-output"
+    "test": "mocha tests/unit --recursive && npm run validate-output"
   },
   "peerDependencies": {
     "grunt": ">=0.4.0"
@@ -35,7 +35,7 @@
   "dependencies": {
     "jscs": "^1.13.1",
     "lodash": "^3.10.0",
-    "tokenize-markdown": "^0.2.0"
+    "tokenize-markdown": "^0.2.1"
   },
   "devDependencies": {
     "bluebird": "^2.9.14",
@@ -51,7 +51,8 @@
     "load-grunt-tasks": "^3.1.0",
     "lodash.merge": "^3.0.3",
     "mocha": "^2.2.1",
-    "sinon": "^1.14.1"
+    "sinon": "^1.14.1",
+    "sinon-chai": "^2.8.0"
   },
   "files": [
     "tasks"
